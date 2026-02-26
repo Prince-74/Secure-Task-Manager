@@ -22,7 +22,7 @@ export const getCookieOptions = () => {
   const isProduction = process.env.NODE_ENV === "production";
   return {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: isProduction ? "none" : "lax",
     secure: isProduction,
     maxAge: ONE_DAY_IN_SECONDS * 1000,
   };
