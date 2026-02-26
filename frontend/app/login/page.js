@@ -18,10 +18,14 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      await apiFetch("/api/auth/login", {
+      const response = await apiFetch("/api/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+      // Store token in localStorage
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+      }
       router.push("/dashboard");
     } catch (err) {
       setError(err.message);

@@ -3,7 +3,16 @@ import { User } from "../models/User.js";
 
 export const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.cookies?.token;
+    let token = req.cookies?.token;
+    
+    // Also check Authorization header for cross-domain requests
+    if (!token && req.headers.authorization) {
+      const authHeader = req.headers.authorization;
+      if (authHeader.startsWith("Bearer ")) {
+        token = authHeader.slice(7);
+      }
+    }
+    
     if (!token) {
       return res.status(401).json({
         success: false,

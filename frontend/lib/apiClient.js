@@ -11,12 +11,25 @@ export const apiFetch = async (path, options = {}) => {
   const baseUrl = getApiBaseUrl();
   const url = `${baseUrl}${path}`;
 
+  // Get token from localStorage
+  let token = null;
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
+
+  // Add Authorization header if token exists
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   const response = await fetch(url, {
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+    headers,
     ...options,
   });
 

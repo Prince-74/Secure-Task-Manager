@@ -19,10 +19,14 @@ export default function RegisterPage() {
     setError("");
     setLoading(true);
     try {
-      await apiFetch("/api/auth/register", {
+      const response = await apiFetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify({ name, email, password }),
       });
+      // Store token in localStorage
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+      }
       router.push("/dashboard");
     } catch (err) {
       setError(err.message);
